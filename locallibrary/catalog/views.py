@@ -44,19 +44,25 @@ class BookCreate(PermissionRequiredMixin, CreateView):
 class BookDetailView(generic.DetailView):
     model = Book
 
-    def book_detail_view(request, pk):
-        try:
-            book_id = Book.objects.get(pk=pk)
-        except Book.DoesNotExist:
-            raise Http404("Book does not exist")
-
-        # book_id=get_object_or_404(Book, pk=pk)
-
-        return render(
-            request,
-            'catalog/book_detail.html',
-            context={'book': book_id, }
-        )
+    # def book_detail_view(request, pk):
+    #     try:
+    #         book_id = Book.objects.get(pk=pk)
+    #     except Book.DoesNotExist:
+    #         raise Http404("Book does not exist")
+    #
+    #     # book_id=get_object_or_404(Book, pk=pk)
+    #
+    #     return render(
+    #         request,
+    #         'catalog/book_detail.html',
+    #         context={'book': book_id, }
+    #     )
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        book = self.get_object()
+        selected_count = book.genre.count()  # Подсчёт количества жанров, связанных с книгой
+        context['selected_count'] = selected_count
+        return context
 
 class BookUpdate(PermissionRequiredMixin, UpdateView):
     model = Book
