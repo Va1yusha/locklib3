@@ -41,6 +41,7 @@ class BookCreate(PermissionRequiredMixin, CreateView):
     fields = ['title', 'author', 'summary', 'isbn', 'genre', 'language']
     permission_required = 'catalog.add_book'
 
+#Обрабатывает запрос и получает объект книги по переданному идентификатору (pk)
 class BookDetailView(generic.DetailView):
     model = Book
 
